@@ -8,16 +8,21 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title></title>
+
         <link rel="stylesheet" href="css/stile.css">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+        <!--Bootstrap-->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
-        <script type="text/javascript">
-            $('.date').datepicker({
-                multidate: true,
-                format: 'dd-mm-yyyy'
-            });
-        </script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+        <!--Bootstrap Datepicker-->
+        <link id="bsdp-css" href="css/bootstrap-datepicker3.min.css" rel="stylesheet">
+        <script src="js/bootstrap-datepicker.min.js"></script>
+        <script src="js/locales/bootstrap-datepicker.it.min.js" charset="UTF-8"></script>
+
+
     </head>
     <body>
         <?php
@@ -33,75 +38,121 @@ and open the template in the editor.
         echo "Connessione al database riuscita.<br>";
 
         if (isset($_POST["submit"])) {
-
-            $dataInizio = date_create("2019-01-01");
-            $dataFine = date_create("2020-01-01");
+            
+            $txtDataInizio = $_POST["dataInizio"];
+            $txtDataFine = $_POST["dataFine"];
+            $txtDateEscluse = $_POST["giorniEsclusi"];
+            
+            $dataInizio = date_create_from_format("d-m-Y", $txtDataInizio);
+            $dataFine = date_create_from_format("d-m-Y", $txtDataFine);
+            
             insertDate($dataInizio, $dataFine, $conn);
-
-            function insertDate($dataInizio, $dataFine, $conn) {
-                $nGiorni = (date_diff($dataInizio, $dataFine)->format("%a")) + 1;
-
-                for ($index = 0; $index < $nGiorni; $index++) {
-
-                    switch (date_format($dataInizio, "N")) {
-                        case 1:
-                            $giorno = "lunedi";
-                            break;
-                        case 2:
-                            $giorno = "martedi";
-                            break;
-                        case 3:
-                            $giorno = "mercoledi";
-                            break;
-                        case 4:
-                            $giorno = "giovedi";
-                            break;
-                        case 5:
-                            $giorno = "venerdi";
-                            break;
-                        case 6:
-                            $giorno = "sabato";
-                            break;
-                        case 7:
-                            date_add($dataInizio, date_interval_create_from_date_string("1 day"));
-                            $giorno = "lunedi";
-                            $index++;
-                            break;
-                    }
-
-                    $sql = "INSERT INTO `giorniscolastici` (`data`, `giorno`) VALUES ('" . date_format($dataInizio, "Y-m-d") . "', '$giorno');";
-                    $conn->query($sql);
-
-                    date_add($dataInizio, date_interval_create_from_date_string("1 day"));
-                }
-
-                echo "Date inserite correttamente.";
-            }
-
-            function deleteDates($datesToDelete, $conn) {
-                foreach ($datesToDelete as $value) {
-                    $sql = "DELETE FROM `giorniscolastici` WHERE `giorniscolastici`.`data` = '" . date_format($value, "Y-m-d") . "'";
-                    $conn->query($sql);
-                }
-            }
-
-            function daleteDateRange($startDate, $endDate, $conn) {
-                $sql = "DELETE FROM `giorniscolastici` WHERE `giorniscolastici`.`data` BETWEEN " . date_format($startDate, "Y-m-d") . " AND " . date_format($endDate, "Y-m-d") . " ;";
-                $conn->query($sql);
-            }
-
+            
+           $datesToDelete = explode(",", $txtDateEscluse);
+           deleteDates($datesToDelete, $conn);
         }
+
+        function insertDate($dataInizio, $dataFine, $conn) {
+            $nGiorni = (date_diff($dataInizio, $dataFine)->format("%a")) + 1;
+            $sql = "";
+
+            for ($index = 0; $index < $nGiorni; $index++) {
+
+                switch (date_format($dataInizio, "N")) {
+                    case 1:
+                        $giorno = "lunedi";
+                        break;
+                    case 2:
+                        $giorno = "martedi";
+                        break;
+                    case 3:
+                        $giorno = "mercoledi";
+                        break;
+                    case 4:
+                        $giorno = "giovedi";
+                        break;
+                    case 5:
+                        $giorno = "venerdi";
+                        break;
+                    case 6:
+                        $giorno = "sabato";
+                        break;
+                    case 7:
+                        date_add($dataInizio, date_interval_create_from_date_string("1 day"));
+                        $giorno = "lunedi";
+                        $index++;
+                        break;
+                }
+
+                $sql .= "INSERT INTO `giorniscolastici` (`data`, `giorno`) VALUES ('" . date_format($dataInizio, "Y-m-d") . "', '$giorno');";
+
+                date_add($dataInizio, date_interval_create_from_date_string("1 day"));
+            }
+
+            $conn->multi_query($sql);
+
+            echo "Date inserite correttamente nella tabella<br>";
+        }
+
+        function deleteDates($datesToDelete, $conn) {
+            foreach ($datesToDelete as $value) {
+                $dataFormattata = date_create_from_format("d-m-Y", $value);
+                $sql = "";
+                
+                $sql .= "DELETE FROM `giorniscolastici` WHERE `giorniscolastici`.`data` = '" . date_format($dataFormattata, "Y-m-d") . "'";
+            }
+            
+            $conn->multi_query($sql);
+            
+            echo "Date da escludere eliminate correttamente dalla tabella<br>";
+        }
+
+        /* NOT WORKING
+        function daleteDateRange($startDate, $endDate, $conn) {
+            $sql = "DELETE FROM `giorniscolastici` WHERE `giorniscolastici`.`data` BETWEEN " . date_format($startDate, "Y-m-d") . " AND " . date_format($endDate, "Y-m-d") . " ;";
+            $conn->query($sql);
+        }*/
         ?>
 
-        <form name="dateInterval" method="post">
-            <br>
-            Data inizio <input type="date" name="dataInizio"><br>
-            Data fine <input type="date" name="dataFine"><br>
-            <div class="container">
+        <div class="container">
+
+            <h2>Selezione giorni scolastici per generazione tabella SQL</h2><br>
+
+            <form name="dateInterval" method="post">
+                Data inizio<br>
+                <input type="text" name="dataInizio" class="form-control date" placeholder="Seleziona la data d'inizio..." readonly>
+                <script type="text/javascript">
+                    $('.date').datepicker({
+                        language: "it",
+                        multidate: false,
+                        format: 'dd-mm-yyyy'
+                    });
+                </script>
+                <br>
+
+                Data fine<br>
+                <input type="text" name="dataFine" class="form-control date" placeholder="Seleziona la data di fine..." readonly>
+                <script type="text/javascript">
+                    $('.date').datepicker({
+                        language: "it",
+                        multidate: false,
+                        format: 'dd-mm-yyyy'
+                    });
+                </script>
+                <br>
+
                 Seleziona le date da escludere (non è necessario selezionare le domeniche)<br>
-                <input type="text" class="form-control date" placeholder="Pick the multiple dates">
-            </div>	
-            <input name="submit" type="submit" value="Invia" />
-        </form>
+                <input type="text" name="giorniEsclusi" class="form-control date" placeholder="Seleziona le date da escludere..." readonly>
+                <script type="text/javascript">
+                    $('.date').datepicker({
+                        language: "it",
+                        multidate: true,
+                        format: 'dd-mm-yyyy'
+                    });
+                </script>
+                <br>	
+                <input name="submit" type="submit" value="Invia" />
+            </form>
+        </div>
     </body>
 </html>
