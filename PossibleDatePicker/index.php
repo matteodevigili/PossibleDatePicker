@@ -123,6 +123,7 @@ and open the template in the editor.
                 <input type="text" name="dataInizio" class="form-control date" placeholder="Seleziona la data d'inizio..." readonly>
                 <script type="text/javascript">
                     $('.date').datepicker({
+                        autoclose: true,
                         language: "it",
                         multidate: false,
                         format: 'dd-mm-yyyy'
@@ -134,6 +135,7 @@ and open the template in the editor.
                 <input type="text" name="dataFine" class="form-control date" placeholder="Seleziona la data di fine..." readonly>
                 <script type="text/javascript">
                     $('.date').datepicker({
+                        autoclose: true,
                         language: "it",
                         multidate: false,
                         format: 'dd-mm-yyyy'
