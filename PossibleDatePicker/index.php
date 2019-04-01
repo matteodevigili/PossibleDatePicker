@@ -48,8 +48,10 @@ and open the template in the editor.
             
             insertDate($dataInizio, $dataFine, $conn);
             
-           $datesToDelete = explode(",", $txtDateEscluse);
-           deleteDates($datesToDelete, $conn);
+			if($txtDateEscluse != ""){
+				$datesToDelete = explode(",", $txtDateEscluse);
+				deleteDates($datesToDelete, $conn);
+			}
         }
 
         function insertDate($dataInizio, $dataFine, $conn) {
