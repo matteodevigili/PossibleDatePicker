@@ -7,7 +7,7 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>Inserimento giorni scolastici</title>
 
         <link rel="stylesheet" href="css/stile.css">
         <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -35,23 +35,28 @@ and open the template in the editor.
         if ($conn->connect_error) {
             die("Errore di connessione al database: " . $conn->connect_error);
         }
-        echo "Connessione al database riuscita.<br>";
+        //echo "Connessione al database riuscita.<br>";
 
         if (isset($_POST["submit"])) {
             
-            $txtDataInizio = $_POST["dataInizio"];
-            $txtDataFine = $_POST["dataFine"];
-            $txtDateEscluse = $_POST["giorniEsclusi"];
-            
-            $dataInizio = date_create_from_format("d-m-Y", $txtDataInizio);
-            $dataFine = date_create_from_format("d-m-Y", $txtDataFine);
-            
-            insertDate($dataInizio, $dataFine, $conn);
-            
-			if($txtDateEscluse != ""){
-				$datesToDelete = explode(",", $txtDateEscluse);
-				deleteDates($datesToDelete, $conn);
-			}
+            if($_POST["dataInizio"] != "" && $_POST["dataFine"] != ""){
+                
+                $txtDataInizio = $_POST["dataInizio"];
+                $txtDataFine = $_POST["dataFine"];
+                $txtDateEscluse = $_POST["giorniEsclusi"];
+
+                $dataInizio = date_create_from_format("d-m-Y", $txtDataInizio);
+                $dataFine = date_create_from_format("d-m-Y", $txtDataFine);
+
+                insertDate($dataInizio, $dataFine, $conn);
+
+                if ($txtDateEscluse != "") {
+                    $datesToDelete = explode(",", $txtDateEscluse);
+                    deleteDates($datesToDelete, $conn);
+                }
+
+                header("location: success.html");
+                }
         }
 
         function insertDate($dataInizio, $dataFine, $conn) {
@@ -93,7 +98,7 @@ and open the template in the editor.
 
             $conn->multi_query($sql);
 
-            echo "Date inserite correttamente nella tabella<br>";
+            //echo "Date inserite correttamente nella tabella<br>";
         }
 
         function deleteDates($datesToDelete, $conn) {
@@ -106,7 +111,7 @@ and open the template in the editor.
             
             $conn->multi_query($sql);
             
-            echo "Date da escludere eliminate correttamente dalla tabella<br>";
+            //echo "Date da escludere eliminate correttamente dalla tabella<br>";
         }
 
         /* NOT WORKING
