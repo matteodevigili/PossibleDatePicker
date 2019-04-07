@@ -4,11 +4,12 @@ CREATE TABLE `giorniscolastici`(
 )
 
 CREATE TABLE evento(
-    idEvento int AUTO_INCREMENT not null PRIMARY KEY,
+    idEvento int not null,
     data Date not null,
     nome varchar(20),
     
     FOREIGN KEY(data) REFERENCES giorniscolastici(data) 
     	on DELETE CASCADE
-   		on UPDATE CASCADE
+   		on UPDATE CASCADE,
+    PRIMARY KEY(idEvento, data)
 )
