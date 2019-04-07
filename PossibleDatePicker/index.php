@@ -30,6 +30,7 @@ and open the template in the editor.
         $host = "localhost";
         $user = "root";
         $psw = "";
+        
 
         $conn = new mysqli($host, $user, $psw, $database);
         if ($conn->connect_error) {
@@ -114,11 +115,7 @@ and open the template in the editor.
             //echo "Date da escludere eliminate correttamente dalla tabella<br>";
         }
 
-        /* NOT WORKING
-        function daleteDateRange($startDate, $endDate, $conn) {
-            $sql = "DELETE FROM `giorniscolastici` WHERE `giorniscolastici`.`data` BETWEEN " . date_format($startDate, "Y-m-d") . " AND " . date_format($endDate, "Y-m-d") . " ;";
-            $conn->query($sql);
-        }*/
+        
         ?>
 
         <div class="container">
