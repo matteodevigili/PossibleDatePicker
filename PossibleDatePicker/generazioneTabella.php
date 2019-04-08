@@ -9,6 +9,7 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <title>Inserimento giorni scolastici</title>
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         
         <link rel="stylesheet" href="css/stileDatePicker.css">
         <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -29,9 +30,9 @@ and open the template in the editor.
         <?php
         include_once './config/dbConnection.php';
         
-        $conn = new mysqli($host, $user, $psw, $database);
+        $conn = @new mysqli($host, $user, $psw, $database);
         if ($conn->connect_error) {
-            die("Errore di connessione al database: " . $conn->connect_error);
+            header("location: error.php?error=".$conn->connect_error);
         }
         //echo "Connessione al database riuscita.<br>";
 
@@ -53,13 +54,15 @@ and open the template in the editor.
                     deleteDates($datesToDelete, $conn);
                 }
 
+                $conn->close();
                 header("location: success.html");
-                }
+            }
         }
 
         function insertDate($dataInizio, $dataFine, $conn) {
             $nGiorni = (date_diff($dataInizio, $dataFine)->format("%a")) + 1;
             $sql = "";
+            $tabellaCalendario = $GLOBALS["tabellaCalendario"];
 
             for ($index = 0; $index < $nGiorni; $index++) {
 
@@ -89,7 +92,7 @@ and open the template in the editor.
                         break;
                 }
 
-                $sql .= "INSERT INTO `giorniscolastici` (`data`, `giorno`) VALUES ('" . date_format($dataInizio, "Y-m-d") . "', '$giorno');";
+                $sql .= "INSERT INTO `$tabellaCalendario` (`data`, `giorno`) VALUES ('" . date_format($dataInizio, "Y-m-d") . "', '$giorno');";
 
                 date_add($dataInizio, date_interval_create_from_date_string("1 day"));
             }
@@ -100,11 +103,13 @@ and open the template in the editor.
         }
 
         function deleteDates($datesToDelete, $conn) {
+            $sql = "";
+            $tabellaCalendario = $GLOBALS["tabellaCalendario"];
+            
             foreach ($datesToDelete as $value) {
                 $dataFormattata = date_create_from_format("d-m-Y", $value);
-                $sql = "";
                 
-                $sql .= "DELETE FROM `giorniscolastici` WHERE `giorniscolastici`.`data` = '" . date_format($dataFormattata, "Y-m-d") . "'";
+                $sql .= "DELETE FROM `$tabellaCalendario` WHERE `$tabellaCalendario`.`data` = '" . date_format($dataFormattata, "Y-m-d") . "'";
             }
             
             $conn->multi_query($sql);
@@ -154,7 +159,7 @@ and open the template in the editor.
                     });
                 </script>
                 <br>	
-                <input name="submit" type="submit" value="Invia" />
+                <input name="submit" type="submit" value="Genera tabella" />
             </form>
         </div>
         <div align="center"><a href="index.php"><button>Home</button></a></div>

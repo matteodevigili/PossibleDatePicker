@@ -16,8 +16,12 @@ and open the template in the editor.
     <body>
         <div align="center"><h1>Tool calendario scolastico</h1></div>
         <div align="center"><h2>ITT Buonarroti-Pozzo</h2></div>
-        <div align="center"><a href="generazioneTabella.php"><button> <i class="fas fa-calendar-alt fa-7x"></i><br><br>Genera calendario scolastico</button></a>   <a href="inserimentoEvento.php"><button> <i class="fas fa-calendar-plus fa-7x"></i><br><br>Inserisci eventi</button></a></div>
+        <div align="center"><a href="generazioneTabella.php"><button margin-right="30px"> <i class="fas fa-calendar-alt fa-7x"></i><br><br>Genera calendario scolastico</button></a>   <a href="inserimentoEvento.php"><button> <i class="fas fa-calendar-plus fa-7x"></i><br><br>Inserisci eventi</button></a></div>
         <br>
-        <div align="center"><h3>Database di connessione:<br></h3><h4>(modificare il file config/dbConnection.php)</h4><?php include_once './config/dbConnection.php'; echo "database: $database<br> host: $host<br> user: $user<br> password: $psw" ?></div>
+        <div align="center"><h3>Database di connessione:<br></h3><h4>(modificare il file config/dbConnection.php)</h4>
+            <?php 
+            include_once './config/dbConnection.php';
+            echo "database: $database<br> host: $host<br> user: $user<br> password: $psw<br><br> tabella calendario: $tabellaCalendario<br> tabella eventi: $tabellaEventi" ?>
+        </div>
     </body>
 </html>

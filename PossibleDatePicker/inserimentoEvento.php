@@ -26,18 +26,28 @@
     <?php
     include_once './config/dbConnection.php';
     
-    $conn = new mysqli($host, $user, $psw, $database);
+    $conn = @new mysqli($host, $user, $psw, $database);
     if ($conn->connect_error) {
-        die("Errore di connessione al database: " . $conn->connect_error);
+        header("location: error.php?error=".$conn->connect_error);
     }
     //echo "Connessione al database riuscita.<br>";
 
     if (isset($_POST["submit"])) {
-        
+        if($_POST["giorniEvento"] != ""){
+            $txtGiorniEvento = $_POST["giorniEvento"];
+            $giorniEvento = explode(",", $txtGiorniEvento);
+            
+            $sql = "";
+            foreach ($giorniEvento as $value) {
+                $dataFormattata = date_create_from_format("d-m-Y", $value);
+                $sql .= "INSERT INTO `$tabellaEventi` (`id`, `title`, `start`, `end`) VALUES (NULL, '".$_POST["nomeEvento"]."', '".date_format($dataFormattata, "Y-m-d")."', '".date_format($dataFormattata, "Y-m-d")."');";
+            }
+            
+            $conn->multi_query($sql);
+            $conn->close();
+        }
     }
-
-
-
+    
     ?>
 
     <div class="container">
@@ -45,10 +55,10 @@
         <h2>Inserimento Evento</h2><br>
         <br>
         <form name="FormEvento" method="post">
-            <a>nome evento: </a> 
+            Nome evento:
             <input type="text" name="nomeEvento" ><br><br>
 
-            <input type="text" name="giornEvento" class="form-control date" placeholder="Seleziona Date Evento..." readonly>
+            <input type="text" name="giorniEvento" class="form-control date" placeholder="Seleziona Date Evento..." readonly>
             <script type="text/javascript">
                 $('.date').datepicker({
                     language: "it",
@@ -58,9 +68,9 @@
             </script> <br>
 
 
-            <input name="submit" type="submit" value="Invia" />
+            <input name="submit" type="submit" value="Inserisci" />
         </form>
     </div>
-    <div align="center"><a href="index.php"><button>Home</button></a></div>
+    <?php include_once 'calendario.php'; ?>
 </body>
 </html>
