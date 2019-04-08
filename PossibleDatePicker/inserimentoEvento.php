@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Inserimento Evento</title>
+    <link rel="stylesheet" href="css/style.css">
 
-    <link rel="stylesheet" href="css/stile.css">
+    <link rel="stylesheet" href="css/stileDatePicker.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 
     <!--Bootstrap-->
@@ -23,11 +24,8 @@
 
 <body>
     <?php
-    $database = "test";
-    $host = "localhost";
-    $user = "root";
-    $psw = "";
-
+    include_once './config/dbConnection.php';
+    
     $conn = new mysqli($host, $user, $psw, $database);
     if ($conn->connect_error) {
         die("Errore di connessione al database: " . $conn->connect_error);
@@ -63,6 +61,6 @@
             <input name="submit" type="submit" value="Invia" />
         </form>
     </div>
+    <div align="center"><a href="index.php"><button>Home</button></a></div>
 </body>
-
 </html>
