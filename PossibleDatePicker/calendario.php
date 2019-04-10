@@ -8,13 +8,14 @@
 
         <link href='fullcalendar/core/main.css' rel='stylesheet' />
         <link href='fullcalendar/daygrid/main.css' rel='stylesheet' />
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
         <script src='fullcalendar/core/main.js'></script>
         <script src='fullcalendar/daygrid/main.js'></script>
         <script src='fullcalendar/core/locales/it.js'></script>
-        
+
         <script src='fullcalendar/interaction/main.js'></script>
-        
+
         <style>
 
             html, body {
@@ -28,27 +29,14 @@
                 max-width: 1100px;
                 margin: 40px auto;
             }
-            
-            #navbar {
-               position: fixed;
-                top: 40%;
-                left: 40%;
-                border: 2px solid lightgray;
-                width: 100%;
-                background-color: white;
-                width: auto;
-                z-index: 10;
-                margin: auto;
-            }
-            form {
-                padding: 20px;
-            }
-            
+
+
+
         </style>
 
 
         <script>
-            
+
             document.addEventListener('DOMContentLoaded', function () {
                 var calendarEl = document.getElementById('calendar');
 
@@ -60,7 +48,16 @@
                         type: 'POST' // Send post data
                     },
                     dateClick: function (info) {
-                        
+                        document.getElementById('id01').style.display = 'block';
+                        var arrData = (info.dateStr).split("-");
+                        var mydate = arrData[2] + "-" + arrData[1] + "-" + arrData[0];
+
+                        document.getElementById('dataInizio').value = mydate;
+                        document.getElementById('dataFine').value = mydate;
+                    },
+                    eventClick: function (info) {
+                        document.getElementById('id02').style.display = 'block';
+                        document.getElementById('nomeEventoHIDDEN').value = info.event.title;
                     }
                 });
 
@@ -70,13 +67,50 @@
         </script>
     </head>
     <body>
-        <div id="navbar">
-            <form name="inserimentoEvento" method="POST"> 
-                Nome evento: <input type="text" name="nomeEvento" value="" /><br>
-                Data inizio: <input type="text" name="dataInizio" value="" /><br>
-                Data fine: <input type="text" name="dataFine" value="" /><br>
-                <input type="submit" value="Inserisci" /><br>
-            </form>
+        <div id="id01" class="w3-modal">
+            <div class="w3-modal-content w3-animate-top w3-card-4">
+                <header class="w3-container w3-teal"> 
+                    <span onclick="document.getElementById('id01').style.display = 'none'" 
+                          class="w3-button w3-display-topright">&times;</span>
+                    <h2>Inserisci evento..</h2>
+                </header>
+                <div class="w3-container">
+                    <form class="w3-container" name="inserimentoEvento" method="POST">
+                        <br>
+                        <label>Nome evento</label>
+                        <input class="w3-input w3-border" name="nomeEvento" type="text" required>
+                        <br>
+                        <label>Data inizio</label>
+                        <input class="w3-input w3-border" id="dataInizio" name="dataInizio" type="text" required>
+                        <br>
+                        <label>Data fine</label>
+                        <input class="w3-input w3-border" id="dataFine" name="dataFine" type="text" required>
+                        <br>
+
+                        <input class="w3-btn w3-teal" type="submit" name="submitInserimento" value="Inserisci" /><br>
+                        <br>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="id02" class="w3-modal">
+            <div class="w3-modal-content w3-animate-top w3-card-4">
+                <header class="w3-container w3-teal"> 
+                    <span onclick="document.getElementById('id02').style.display = 'none'" 
+                          class="w3-button w3-display-topright">&times;</span>
+                    <h2>Cancella evento</h2>
+                </header>
+                <div class="w3-container">
+                    <form class="w3-container" name="eliminaEvento" method="POST">
+                        <br>
+                        <label>Vuoi eliminare l'evento?</label>
+                        <input type="hidden" name="nomeEventoHIDDEN" id="nomeEventoHIDDEN"/>
+                        <br><br>
+                        <input class="w3-btn w3-teal" type="submit" name="submitEliminazione" value="Si" /> <button class="w3-btn w3-teal" onclick="document.getElementById('id02').style.display = 'none'">No</button> <br>
+                        <br>
+                    </form>
+                </div>
+            </div>
         </div>
         <div id='calendar'></div>
         <div align="center"><a href="index.php"><button>Home</button></a></div>

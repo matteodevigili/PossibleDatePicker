@@ -1,4 +1,5 @@
 <?php
+
 //Database
 $database = "prenotazioneaule";
 $host = "localhost";

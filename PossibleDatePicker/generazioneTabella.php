@@ -10,7 +10,8 @@ and open the template in the editor.
         <title>Inserimento giorni scolastici</title>
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-        
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
         <link rel="stylesheet" href="css/stileDatePicker.css">
         <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 
@@ -29,17 +30,17 @@ and open the template in the editor.
     <body>
         <?php
         include_once './config/dbConnection.php';
-        
+
         $conn = @new mysqli($host, $user, $psw, $database);
         if ($conn->connect_error) {
-            header("location: error.php?error=".$conn->connect_error);
+            header("location: error.php?error=" . $conn->connect_error);
         }
         //echo "Connessione al database riuscita.<br>";
 
         if (isset($_POST["submit"])) {
-            
-            if($_POST["dataInizio"] != "" && $_POST["dataFine"] != ""){
-                
+
+            if ($_POST["dataInizio"] != "" && $_POST["dataFine"] != "") {
+
                 $txtDataInizio = $_POST["dataInizio"];
                 $txtDataFine = $_POST["dataFine"];
                 $txtDateEscluse = $_POST["giorniEsclusi"];
@@ -105,27 +106,24 @@ and open the template in the editor.
         function deleteDates($datesToDelete, $conn) {
             $sql = "";
             $tabellaCalendario = $GLOBALS["tabellaCalendario"];
-            
+
             foreach ($datesToDelete as $value) {
                 $dataFormattata = date_create_from_format("d-m-Y", $value);
-                
+
                 $sql .= "DELETE FROM `$tabellaCalendario` WHERE `$tabellaCalendario`.`data` = '" . date_format($dataFormattata, "Y-m-d") . "'";
             }
-            
+
             $conn->multi_query($sql);
-            
+
             //echo "Date da escludere eliminate correttamente dalla tabella<br>";
         }
-
-        
         ?>
-
-        <div class="container">
-
-            <h2>Selezione giorni scolastici per generazione tabella SQL</h2><br>
-
+        <div class="w3-container w3-teal">
+            <h2>Selezione giorni scolastici per generazione tabella SQL</h2>
+        </div>
+        <div class="container w3-container">
             <form name="dateInterval" method="post">
-                Data inizio<br>
+                <br><label>Data inizio</label>
                 <input type="text" name="dataInizio" class="form-control date" placeholder="Seleziona la data d'inizio..." readonly>
                 <script type="text/javascript">
                     $('.date').datepicker({
@@ -137,7 +135,7 @@ and open the template in the editor.
                 </script>
                 <br>
 
-                Data fine<br>
+                <label>Data fine</label>
                 <input type="text" name="dataFine" class="form-control date" placeholder="Seleziona la data di fine..." readonly>
                 <script type="text/javascript">
                     $('.date').datepicker({
@@ -149,7 +147,7 @@ and open the template in the editor.
                 </script>
                 <br>
 
-                Seleziona le date da escludere (non è necessario selezionare le domeniche)<br>
+                <label>Seleziona le date da escludere (non è necessario selezionare le domeniche)</label>
                 <input type="text" name="giorniEsclusi" class="form-control date" placeholder="Seleziona le date da escludere..." readonly>
                 <script type="text/javascript">
                     $('.date').datepicker({
@@ -159,7 +157,7 @@ and open the template in the editor.
                     });
                 </script>
                 <br>	
-                <input name="submit" type="submit" value="Genera tabella" />
+                <input class="w3-btn w3-teal" name="submit" type="submit" value="Genera tabella" />
             </form>
         </div>
         <div align="center"><a href="index.php"><button>Home</button></a></div>
