@@ -57,7 +57,12 @@
                     },
                     eventClick: function (info) {
                         document.getElementById('id02').style.display = 'block';
-                        document.getElementById('nomeEventoHIDDEN').value = info.event.title;
+                        document.getElementById('idEventoHIDDEN').value = info.event.id;
+                    },
+                    eventRender: function (event, element) {
+                        if (event.color) {
+                            element.css('background-color', event.color);
+                        }
                     }
                 });
 
@@ -104,7 +109,7 @@
                     <form class="w3-container" name="eliminaEvento" method="POST">
                         <br>
                         <label>Vuoi eliminare l'evento?</label>
-                        <input type="hidden" name="nomeEventoHIDDEN" id="nomeEventoHIDDEN"/>
+                        <input type="hidden" name="idEventoHIDDEN" id="idEventoHIDDEN"/>
                         <br><br>
                         <input class="w3-btn w3-teal" type="submit" name="submitEliminazione" value="Si" /> <button class="w3-btn w3-teal" onclick="document.getElementById('id02').style.display = 'none'">No</button> <br>
                         <br>

@@ -11,18 +11,34 @@ $sql = "SELECT * FROM $tabellaEventi";
 $result = $conn->query($sql);
 
 $events = array();
+$e = array();
+$colorMap = array();
+$colors = array("#f44336", "#2196f3", "#009688", "#ffeb3b", "#ff9800", "#9e9e9e", "#607d8b");
+$iColors = 0;
+
 
 foreach ($result as $row) {
-
-    $e = array();
     $e['id'] = $row['id'];
     $e['title'] = $row["title"];
     $e['start'] = $row['start'];
     $e['end'] = $row['end'];
-    $e['allDay'] = false;
+    $e['allDay'] = true;
+    if(!isset($colorMap[$row["title"]])){
+        
+        $colorMap[$row["title"]] = $colors[$iColors];
+        $e["color"] = $colorMap[$row["title"]];
+        
+        $iColors++;
+        if($iColors == 7){
+            $iColors = 0;
+        }
+    }else{
+        $e["color"] = $colorMap[$row["title"]];
+    }
 
     array_push($events, $e);
 }
 
+$conn->close();
 echo json_encode($events);
 exit();

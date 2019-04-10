@@ -49,7 +49,7 @@
         }
 
         if (isset($_POST["submitEliminazione"])) {
-            $sql = "DELETE FROM `$tabellaEventi` WHERE `eventi`.`title` = '" . $_POST["nomeEventoHIDDEN"] . "'";
+            $sql = "DELETE FROM `$tabellaEventi` WHERE `eventi`.`id` = '" . $_POST["idEventoHIDDEN"] . "'";
 
             $conn->query($sql);
             $conn->close();
