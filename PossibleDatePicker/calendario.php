@@ -8,11 +8,13 @@
 
         <link href='fullcalendar/core/main.css' rel='stylesheet' />
         <link href='fullcalendar/daygrid/main.css' rel='stylesheet' />
+		<link href='fullcalendar/list/main.css' rel='stylesheet' />
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
         <script src='fullcalendar/core/main.js'></script>
         <script src='fullcalendar/daygrid/main.js'></script>
         <script src='fullcalendar/core/locales/it.js'></script>
+		<script src='fullcalendar/list/main.js'></script>
 
         <script src='fullcalendar/interaction/main.js'></script>
 
@@ -36,13 +38,18 @@
 
 
         <script>
-
+			
             document.addEventListener('DOMContentLoaded', function () {
                 var calendarEl = document.getElementById('calendar');
 
                 var calendar = new FullCalendar.Calendar(calendarEl, {
-                    plugins: ['interaction', 'dayGrid', 'timeGrid'],
+                    plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
                     locale: 'it',
+					header: {
+						left: 'prev,next today',
+						center: 'title',
+						right: 'dayGridMonth,listMonth'
+					},
                     events: {
                         url: 'json-events-feed.php',
                         type: 'POST' // Send post data
@@ -118,6 +125,6 @@
             </div>
         </div>
         <div id='calendar'></div>
-        <div align="center"><a href="index.php"><button>Home</button></a></div>
+        <div align="center"><a href="index.php"><button>Home</button></a></div><br>
     </body>
 </html>
