@@ -31,10 +31,39 @@
                 max-width: 1100px;
                 margin: 40px auto;
             }
-            
+
             .fc-scroller{
                 height: auto !important;
                 overflow: auto !important;
+            }
+
+            .sidenav {
+                height: 100%;
+                width: 0;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                right: 0;
+                overflow-x: hidden;
+                transition: 0.5s;
+                padding-top: 60px;
+            }
+
+
+
+
+
+            .sidenav .closebtn {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }
+
+            @media screen and (max-height: 450px) {
+                .sidenav {padding-top: 15px;}
+                .sidenav a {font-size: 18px;}
             }
 
         </style>
@@ -63,9 +92,33 @@
                 calendar.render();
             });
 
+
+
+
         </script>
     </head>
     <body>
-        <div id='calendar'></div>
+        <div id="mySidenav" class="sidenav">
+            <div id='calendar'></div>
+        </div>
+
+        <h2>Animated Sidenav Example</h2>
+        <p>Click on the element below to open the side navigation menu.</p>
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+
+        <script>
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+        </script>
+
+
+
+
+        
     </body>
 </html>
