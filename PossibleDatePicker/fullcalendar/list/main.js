@@ -188,6 +188,7 @@ Docs & License: https://fullcalendar.io/
             var _a = this, dateEnv = _a.dateEnv, nextDayThreshold = _a.nextDayThreshold;
             var range = eventRange.range;
             var allDay = eventRange.def.allDay;
+            alert("allDay"+allDay);
             var dayIndex;
             var segRange;
             var seg;
