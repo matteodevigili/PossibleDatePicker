@@ -41,7 +41,7 @@
                 $dataInizio = date_create_from_format("d-m-Y", $_POST["dataInizio"]);
                 $dataFine = date_create_from_format("d-m-Y", $_POST["dataFine"]);
 
-                $sql = "INSERT INTO `$tabellaEventi` (`id`, `title`, `start`, `end`) VALUES (NULL, '" . $_POST["nomeEvento"] . "', '" . date_format($dataInizio, "Y-m-d") . "', '" . date_format($dataFine, "Y-m-d") . "');";
+                $sql = "INSERT INTO `$tabellaEventi` (`id`, `title`, `start`, `end`) VALUES (NULL, '" . $_POST["nomeEvento"] . "', '" . date_format($dataInizio, "Y-m-d") . "', '" . date_format($dataFine, "Y-m-d")." 23:59:59". "');";
 
                 $conn->query($sql);
                 $conn->close();

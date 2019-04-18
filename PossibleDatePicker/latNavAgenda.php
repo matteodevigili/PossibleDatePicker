@@ -47,11 +47,14 @@
                 overflow-x: hidden;
                 transition: 0.5s;
                 padding-top: 60px;
+                border-left: solid 1px #ddd;
+                
+                background-color: white;
             }
-
-
-
-
+            
+            .fc-list-item-time  {
+                display: none !important;
+            }
 
             .sidenav .closebtn {
                 position: absolute;
@@ -59,6 +62,7 @@
                 right: 25px;
                 font-size: 36px;
                 margin-left: 50px;
+                text-decoration: none !important;
             }
 
             @media screen and (max-height: 450px) {
@@ -99,20 +103,22 @@
     </head>
     <body>
         <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <div id='calendar'></div>
         </div>
-
-        <h2>Animated Sidenav Example</h2>
-        <p>Click on the element below to open the side navigation menu.</p>
+        
         <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
 
+<hr>
         <script>
             function openNav() {
-                document.getElementById("mySidenav").style.width = "250px";
+                document.getElementById("mySidenav").style.width = "300px";
+                document.getElementById("mySidenav").style.padding = "5px";
             }
 
             function closeNav() {
                 document.getElementById("mySidenav").style.width = "0";
+                document.getElementById("mySidenav").style.padding = "0";
             }
         </script>
 

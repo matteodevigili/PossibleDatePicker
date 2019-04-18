@@ -13,7 +13,7 @@ $result = $conn->query($sql);
 $events = array();
 $e = array();
 $colorMap = array();
-$colors = array("#f44336", "#2196f3", "#009688", "#ffeb3b", "#ff9800", "#9e9e9e", "#607d8b");
+$colors = array("#f44336", "#2196f3", "#009688", "#d8d82d", "#ff9800", "#9e9e9e", "#607d8b");
 $iColors = 0;
 
 
@@ -22,7 +22,7 @@ foreach ($result as $row) {
     $e['title'] = $row["title"];
     $e['start'] = $row['start'];
     $e['end'] = $row['end'];
-    $e['allDay'] = true;
+    $e['allDay'] = false;
     if(!isset($colorMap[$row["title"]])){
         
         $colorMap[$row["title"]] = $colors[$iColors];
